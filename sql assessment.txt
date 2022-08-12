@@ -1,0 +1,171 @@
+/*
+1.DIFFERENCE BETWEEN LOCAL AND GOBAL TABLES:
+			* The local table is the table which is corrected inserted and updated in the version area that migth localy seted.
+			* the gobal in general statement that attached in various process of action.
+
+2.CHECK constraint :
+			*The check constraint is the constraint value which is the form of checking the befort the table can excute,
+this is known as check constrain.
+ex;check(salary<1000000);.
+
+3.Trigger:	
+		*The trigger is the database system ,which once its declare as a data like insert,delete or update is donot appears on the table after its declaration.
+ex;create trigger trg.name  insert(name,ph_no) on student.
+
+4.IDENTITY column in insert statements;	
+		*The identity is a id to be followed in single declaration.
+ex;id int identity(1,1).
+
+5.difference between COMMIT and ROLLBACK:
+			* The COMMIT is the storing or saving of transaction in the tables.
+			* ROLLBACK is the process of undoing the index query.
+
+
+6.Filtered Index; 
+		*The index is the specification of the column that could be a way of identifying the individual data to be follow across the table and it is representing of primary key.
+ex;create index idx.name from student where id=1;.
+
+7.a JOIN, and mention its Types;
+		* The join is the funtion which use to connect two seperate tables into a single table and it perform a various action
+in the table.
+		* There are 4 type of joins,inner join,left join,rigth join,cross join.
+
+8.Foreign Key and a Primary Key;
+		* The primary key is the unique key which should not replace into another data set.
+		* The foreign key is specified by primary key which should assign as a value to a new data in the table.
+
+
+9.Stored Procedures and Functions;
+		* The stored procedures is already set in the dataset that should reuse by tha tables.
+		* The function is have inbuild function and user defined function and it can  easy to assign and call data immediately and it is use to perfrm a task in sql.
+
+
+10.Clustered Indexes; The clustred index is the order of viewing the value in the index data which could allow the data index in the table.
+
+                 
+
+CREATE DATABASE ORG;
+--SHOW DATABASE;
+USE ORG;
+
+CREATE TABLE Workers (
+	WORKER_ID INT NOT NULL PRIMARY KEY ,
+	FIRST_NAME VARCHAR(30),
+	LAST_NAME VARCHAR(30),
+	SALARY INT,
+	JOINING_DATE DATETIME,
+	DEPARTMENT VARCHAR(25)
+);
+
+INSERT INTO Workers 
+	(WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) VALUES
+		(001, 'Monika', 'Arora', 100000, ' 8/12/2022 3:55:30 ', 'HR'),
+		(002, 'Niharika', 'Verma', 80000, ' 8/12/2022 3:55:30 ', 'Admin'),
+		(003, 'Vishal', 'Singhal', 300000, ' 8/12/2022 3:55:30 ', 'HR'),
+		(004, 'Amitabh', 'Singh', 500000, ' 8/12/2022 3:55:30 ', 'Admin'),
+		(005, 'Vivek', 'Bhati', 500000, ' 8/12/2022 3:55:30 ', 'Admin'),
+		(006, 'Vipul', 'Diwan', 200000, ' 8/12/2022 3:55:30 ', 'Account'),
+		(007, 'Satish', 'Kumar', 75000, ' 8/12/2022 3:55:30 ', 'Account'),
+		(008, 'Geetika', 'Chauhan', 90000, ' 8/12/2022 3:55:30 ', 'Admin');
+
+		select * from workers
+
+--1
+select * into workers_clone from workers
+
+--2
+
+SELECT CONCAT_WS('     ', FIRST_NAME , LAST_NAME ) AS 'COMPLETE_NAME' FROM workers;
+--3
+
+select * from  workers order by FIRST_NAME
+--4
+select * from workers where salary between 100000 and 500000
+--5
+
+select * from  workers order by DEPARTMENT desc
+---7
+
+CREATE FUNCTION(@P,@T,@R)
+RETUEN INT
+AS
+BEGIN
+RETURN(@P*@T*@R%100)
+END
+
+
+--8
+select avg(salary) as 'average_salary' from workers
+
+--10
+drop table workers
+
+
+CREATE TABLE Bonus (
+	WORKER_REF_ID INT,
+	BONUS_AMOUNT INT,
+	BONUS_DATE DATETIME,
+	FOREIGN KEY (WORKER_REF_ID)
+	REFERENCES Workers(WORKER_ID)
+    ON DELETE CASCADE
+);
+
+INSERT INTO Bonus 
+	(WORKER_REF_ID, BONUS_AMOUNT, BONUS_DATE) VALUES
+		(001, 5000, '8/12/2022'),
+		(002, 3000, '8/12/2022'),
+		(003, 4000, '8/12/2022'),
+		(001, 4500, '8/12/2022'),
+		(002, 3500, '8/12/2022');
+select * from Bonus
+---9
+create index idx_bonusdate on bonus( BONUS_DATE)
+		
+CREATE TABLE Title (
+	WORKER_REF_ID INT,
+	WORKER_TITLE CHAR(25),
+	AFFECTED_FROM DATETIME,
+	FOREIGN KEY (WORKER_REF_ID)
+		REFERENCES Workers(WORKER_ID)
+        ON DELETE CASCADE
+);
+
+INSERT INTO Title 
+	(WORKER_REF_ID, WORKER_TITLE, AFFECTED_FROM) VALUES
+ (001, 'Manager', '8/12/2022 4:19:39'),
+ (002, 'Executive', '8/12/2022 4:19:39'),
+ (008, 'Executive', '8/12/2022 4:19:39'),
+ (005, 'Manager', '8/12/2022 4:19:39'),
+ (004, 'Asst. Manager', '8/12/2022 4:19:39'),
+ (007, 'Executive', '8/12/2022 4:19:39'),
+ (006, 'Lead', '8/12/2022 4:19:39'),
+ (003, 'Lead', '8/12/2022 4:19:39');
+ select * from title
+
+ CREATE DATABASE TRIGGERS
+ USE TRIGGERS
+
+---6,
+ CREATE TABLE Title (
+	WORKER_REF_ID INT IDENTITY,
+	WORKER_TITLE CHAR(25),
+	AFFECTED_FROM DATETIME
+	
+);
+
+INSERT INTO Title  VALUES
+ ( 'Manager', '8/12/2022 4:19:39'),
+ ( 'Executive', '8/12/2022 4:19:39'),
+ ( 'Executive', '8/12/2022 4:19:39'),
+ ( 'Manager', '8/12/2022 4:19:39'),
+ ( 'Asst. Manager', '8/12/2022 4:19:39'),
+ ( 'Executive', '8/12/2022 4:19:39'),
+ ( 'Lead', '8/12/2022 4:19:39'),
+ ( 'Lead', '8/12/2022 4:19:39');
+ select * from title
+
+ 
+
+
+
+*\
